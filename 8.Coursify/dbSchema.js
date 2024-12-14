@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const ObjectId = mongoose.ObjectId;
+const ObjectId = mongoose.Types.ObjectId;
 
 //User schema
 const userSchema = new Schema({
@@ -33,7 +33,7 @@ const purchaseSchema = new Schema({
   courseId: ObjectId,
 });
 
-const UserModel = mongoose.model("user", userSchema);
+const userModel = mongoose.model("user", userSchema);
 const adminModel = mongoose.model("admin", adminSchema);
 const courseModel = mongoose.model("course", courseSchema);
 const purchaseModel = mongoose.model("purchase", purchaseSchema);
