@@ -4,9 +4,12 @@ const { userRouter } = require("./routes/user");
 const { courseRouter } = require("./routes/course");
 const { adminRouter } = require("./routes/admin");
 const mongoose = require("mongoose");
+const { loggerMiddleware } = require("./middleware/loggermiddleware");
 const app = express();
 
 app.use(express.json());
+
+app.use(loggerMiddleware); // Use the logging middleware
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/admin", adminRouter);
