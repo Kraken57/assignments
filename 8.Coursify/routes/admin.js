@@ -3,9 +3,18 @@ const jwt = require("jsonwebtoken");
 const { adminModel } = require("../dbSchema");
 const bcrypt = require("bcrypt");
 const { JWT_ADMIN_PASSWORD } = require("../config");
+const { requiredBody } = require("../validation");
 const adminRouter = Router();
 
 adminRouter.post("/signup", async (req, res) => {
+  const parsedDataWithSuccess = requiredBody.safeParse(req.body);
+  if (!parsedDataWithSuccess) {
+    return res.json({
+      message: "Incorrect format",
+      error: parsedDataWithSuccess.error.errors,
+    });
+  }
+
   const { email, password, firstname, lastname } = req.body;
 
   try {

@@ -3,12 +3,20 @@ const { userModel, courseModel } = require("../dbSchema");
 const jwt = require("jsonwebtoken");
 const { JWT_USER_PASSWORD } = require("../config");
 const { userMiddleware } = require("../middleware/user");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const { requiredBody } = require("../validation");
 const userRouter = Router();
 
 userRouter.post("/signup", async (req, res) => {
-  const { email, password, firstname, lastname } = req.body;
+  const parsedDataWithSuccess = requiredBody.safeParse(req.body);
+  if (!parsedDataWithSuccess) {
+    return res.json({
+      message: "Incorrect format",
+      error: parsedDataWithSuccess.error.errors,
+    });
+  }
 
+  const { email, password, firstname, lastname } = req.body;
   try {
     const existUser = await userModel.findOne({ email });
     if (existUser) {
@@ -17,7 +25,7 @@ userRouter.post("/signup", async (req, res) => {
       });
     }
 
-    const hashedUserPass = await bcrypt.hash(password, 5)
+    const hashedUserPass = await bcrypt.hash(password, 5);
 
     await userModel.create({
       email: email,
@@ -45,7 +53,7 @@ userRouter.post("/signin", async (req, res) => {
     password: password,
   });
 
-  const comparedUserPass = await bcrypt.compare(password, user.password)
+  const comparedUserPass = await bcrypt.compare(password, user.password);
 
   if (comparedUserPass) {
     const token = jwt.sign(
@@ -72,10 +80,6 @@ userRouter.get("/purchases", userMiddleware, async (req, res) => {
   });
 
   const purchasedCourseId = [];
-  
-  
-
-
 });
 
 module.exports = {
