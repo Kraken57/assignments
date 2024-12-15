@@ -3,6 +3,7 @@ const { userModel, courseModel, adminModel } = require("../dbSchema");
 const jwt = require("jsonwebtoken");
 const { JWT_USER_PASSWORD } = require("../config");
 const { userMiddleware } = require("../middleware/user");
+const bcrypt = require("bcrypt")
 const userRouter = Router();
 
 userRouter.post("/signup", async (req, res) => {
@@ -16,9 +17,11 @@ userRouter.post("/signup", async (req, res) => {
       });
     }
 
+    const hashedPass = await bcrypt.hash(password, 5)
+
     await userModel.create({
       email: email,
-      password: password,
+      password: hashedPass,
       firstname: firstname,
       lastname: lastname,
     });
@@ -42,7 +45,9 @@ userRouter.post("/signin", async (req, res) => {
     password: password,
   });
 
-  if (user) {
+  const comparedPass = await bcrypt.compare(password, user.password)
+
+  if (comparedPass) {
     const token = jwt.sign(
       {
         id: user._id,
@@ -68,7 +73,7 @@ userRouter.get("/purchases", userMiddleware, async (req, res) => {
 
   const purchasedCourseId = [];
 
-  purchasedCourseId.push();
+  
 });
 
 module.exports = {
