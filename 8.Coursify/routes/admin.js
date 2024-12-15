@@ -4,18 +4,19 @@ const { adminModel } = require("../dbSchema");
 const bcrypt = require("bcrypt");
 const { JWT_ADMIN_PASSWORD } = require("../config");
 const { requiredBody } = require("../validation");
+const { adminMiddleware } = require("../middleware/admin");
 const adminRouter = Router();
 
 adminRouter.post("/signup", async (req, res) => {
   const parsedDataWithSuccess = requiredBody.safeParse(req.body);
-  if (!parsedDataWithSuccess) {
+  if (!parsedDataWithSuccess.success) {
     return res.json({
       message: "Incorrect format",
       error: parsedDataWithSuccess.error.errors,
     });
   }
 
-  const { email, password, firstname, lastname } = req.body;
+  const { email, password, firstname, lastname } = parsedDataWithSuccess.data;
 
   try {
     const adminexist = await adminModel.findOne({ email });
@@ -49,7 +50,6 @@ adminRouter.post("/signin", async (req, res) => {
 
   const admin = await adminModel.findOne({
     email: email,
-    password: password,
   });
 
   const comparedAdminPass = await bcrypt.compare(password, admin.password);
@@ -72,7 +72,9 @@ adminRouter.post("/signin", async (req, res) => {
   }
 });
 
-adminRouter.post("/course", (req, res) => {});
+adminRouter.post("/course", adminMiddleware, (req, res) => {
+  const adminId = req.adminId;
+});
 
 adminRouter.put("/course", (req, res) => {});
 

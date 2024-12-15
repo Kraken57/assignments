@@ -8,12 +8,18 @@ const app = express();
 
 app.use(express.json());
 
-app.use("api/v1/user", userRouter);
-app.use("api/v1/admin", adminRouter);
-app.use("api/v1/course", courseRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/course", courseRouter);
 
 async function main() {
-  await mongoose.connect(process.env.MONGO_URL);
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    process.exit(1); // Exit the process if the database connection fails
+  }
 
   app.listen(3000, () => {
     console.log("Server running at Port 3000");

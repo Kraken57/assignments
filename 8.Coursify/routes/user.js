@@ -9,14 +9,14 @@ const userRouter = Router();
 
 userRouter.post("/signup", async (req, res) => {
   const parsedDataWithSuccess = requiredBody.safeParse(req.body);
-  if (!parsedDataWithSuccess) {
+  if (!parsedDataWithSuccess.success) {
     return res.json({
       message: "Incorrect format",
       error: parsedDataWithSuccess.error.errors,
     });
   }
 
-  const { email, password, firstname, lastname } = req.body;
+  const { email, password, firstname, lastname } = parsedDataWithSuccess.data;
   try {
     const existUser = await userModel.findOne({ email });
     if (existUser) {
@@ -50,7 +50,6 @@ userRouter.post("/signin", async (req, res) => {
 
   const user = await userModel.findOne({
     email: email,
-    password: password,
   });
 
   const comparedUserPass = await bcrypt.compare(password, user.password);
