@@ -78,7 +78,13 @@ userRouter.get("/purchases", userMiddleware, async (req, res) => {
     userId,
   });
 
-  const purchasedCourseId = [];
+  const courseData = await courseModel.find({
+    _id: { $in: purchases.map((x) => x.courseId) },
+  });
+  res.json({
+    purchases,
+    courseData,
+  });
 });
 
 module.exports = {

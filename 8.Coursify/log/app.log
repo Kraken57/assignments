@@ -1,3 +1,0 @@
-{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/user/signup\",\"status\":\"201\",\"responseTime\":\"138.482\"}","timestamp":"2024-12-15T12:21:58.587Z"}
-{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/user/signup\",\"status\":\"400\",\"responseTime\":\"76.850\"}","timestamp":"2024-12-15T12:23:11.620Z"}
-{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/user/signup\",\"status\":\"400\",\"responseTime\":\"50.716\"}","timestamp":"2024-12-15T12:24:48.717Z"}
