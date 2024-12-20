@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Command } from "lucide-react";
 import { TodoItem } from "./components/TodoItem";
@@ -8,6 +8,7 @@ import { Background } from "./components/Background";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { Todo } from "./types/todo";
 import { useTodos } from "./hooks/useTodos";
+import "./index.css";
 
 function App() {
   const { todos, addTodo, toggleTodo, deleteTodo, editTodo } = useTodos();
